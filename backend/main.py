@@ -47,15 +47,17 @@ def get_google_sheets_service():
         check_credentials_file()
         
         creds = None
-        if os.path.exists('token.pickle'):
+        token_path = os.path.join(os.path.dirname(__file__), 'token.pickle')
+        
+        if os.path.exists(token_path):
             try:
-                with open('token.pickle', 'rb') as token:
+                with open(token_path, 'rb') as token:
                     creds = pickle.load(token)
                 logger.info("Loaded existing credentials from token.pickle")
             except Exception as e:
                 logger.error(f"Error loading token.pickle: {str(e)}")
-                if os.path.exists('token.pickle'):
-                    os.remove('token.pickle')
+                if os.path.exists(token_path):
+                    os.remove(token_path)
                     logger.info("Removed corrupted token.pickle")
     
         if not creds or not creds.valid:
@@ -74,12 +76,13 @@ def get_google_sheets_service():
                     creds = flow.run_local_server(
                         port=8080,
                         success_message='Authentication successful! You can close this window.',
-                        open_browser=True
+                        open_browser=True,
+                        access_type='offline',  # This ensures we get a refresh token
                     )
                     logger.info("Created new credentials through OAuth flow")
                     
                     # Save the credentials for the next run
-                    with open('token.pickle', 'wb') as token:
+                    with open(token_path, 'wb') as token:
                         pickle.dump(creds, token)
                         logger.info("Saved new credentials to token.pickle")
                 except Exception as e:
