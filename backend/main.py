@@ -131,7 +131,7 @@ async def log_activity(activity: Activity):
         time = now.strftime("%I:%M:%S %p")
         
         # Prepare the data
-        values = [[day, date, time, activity.activity]]
+        values = [[date, day, time, activity.activity]]
         body = {'values': values}
         
         # Append to spreadsheet
