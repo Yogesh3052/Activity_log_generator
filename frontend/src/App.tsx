@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card';
 import { ClipboardList, Send, Loader2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Toaster } from '@/components/ui/toaster';
+import { ActivityLogs } from '@/components/ActivityLogs';
 
 const API_URL = 'http://localhost:8000';
 
@@ -145,6 +146,9 @@ function App() {
             </Button>
           </form>
         </Card>
+
+        {/* Activity Logs */}
+        <ActivityLogs isConnected={isConnected} />
       </div>
       <Toaster />
     </div>
